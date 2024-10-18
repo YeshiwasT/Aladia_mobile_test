@@ -43,12 +43,8 @@ jobs:
       - name: Build Widgetbook
         run: flutter build web 
 
-      # Step 8: Upload to Widgetbook Cloud
-      - name: Upload to Widgetbook Cloud
-        env:
-          WIDGETBOOK_API_KEY: ${{ secrets.WIDGETBOOK_API_KEY }}
-        run: |
-          curl -X POST https://api.widgetbook.cloud/v1/uploads \
-          -H "Authorization: Bearer $WIDGETBOOK_API_KEY" \
-          -F "file=@build/web.zip" \
-          -F "project=your-project-id"
+      - name: Install Widgetbook CLI
+        run: dart pub global activate --source path ../packages/widgetbook_cli
+
+      - name: Push Build
+        run: widgetbook cloud build push --api-key ${{ secrets.WIDGETBOOK_API_KEY }} 
