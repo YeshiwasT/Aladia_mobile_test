@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      FLUTTER_VERSION: '3.10.5'  # Use your required Flutter version
+      FLUTTER_VERSION: '3.24.3' # Use your required Flutter version
 
     steps:
       # Step 1: Checkout the code
