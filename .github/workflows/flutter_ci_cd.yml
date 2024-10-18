@@ -1,21 +1,22 @@
-name: Flutter CI with Widgetbook Cloud
+name: Flutter CI
 
 on:
   pull_request:
     branches:
       - main
+      - develop  # Adjust according to your branching strategy
 
 jobs:
   flutter-ci:
     runs-on: ubuntu-latest
 
     env:
-      FLUTTER_VERSION: '3.24.3' # Use your required Flutter version
+      FLUTTER_VERSION: '3.24.3'  # Match this with your Flutter version
 
     steps:
-      # Step 1: Checkout the code
+      # Step 1: Checkout the code from the pull request
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       # Step 2: Set up Flutter SDK
       - name: Setup Flutter
@@ -27,19 +28,22 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      # Step 4: Run unit tests
+      # Step 4: Navigate to the Widgetbook folder and run build_runner
+      - name: Run Build Runner
+        run: |
+          cd widgetbook    # Change this to the actual path
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+
+      # Step 5: Run unit tests
       - name: Run Unit Tests
         run: flutter test --coverage
 
-      # Step 5: Code generation using build_runner
-      - name: Code Generation (build_runner)
-        run: flutter pub run build_runner build --delete-conflicting-outputs
-
-      # Step 6: Build Widgetbook for web
+      # Step 6: Build Widgetbook
       - name: Build Widgetbook
         run: flutter build web --web-renderer html --release -t lib/widgetbook.dart
 
-      # Step 7: Upload to Widgetbook Cloud
+      # Step 8: Upload to Widgetbook Cloud
       - name: Upload to Widgetbook Cloud
         env:
           WIDGETBOOK_API_KEY: ${{ secrets.WIDGETBOOK_API_KEY }}
