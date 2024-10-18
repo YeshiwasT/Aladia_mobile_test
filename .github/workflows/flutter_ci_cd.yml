@@ -52,6 +52,8 @@ jobs:
           dart pub global activate widgetbook_cli
 
       - name: Push Build
+        env:
+          WIDGETBOOK_API_KEY: ${{ secrets.WIDGETBOOK_API_KEY }}
         run: |
           cd widgetbook
-          widgetbook cloud build push --api-key c53e022d5caa0e0a16173255a46bf65ac77ec3b5a032e80af906822da2ac9ad8
+          widgetbook cloud build push --api-key "$WIDGETBOOK_API_KEY"
