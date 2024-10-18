@@ -1,0 +1,50 @@
+name: Flutter CI with Widgetbook Cloud
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  flutter-ci:
+    runs-on: ubuntu-latest
+
+    env:
+      FLUTTER_VERSION: '3.10.5'  # Use your required Flutter version
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Flutter SDK
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # Step 4: Run unit tests
+      - name: Run Unit Tests
+        run: flutter test --coverage
+
+      # Step 5: Code generation using build_runner
+      - name: Code Generation (build_runner)
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      # Step 6: Build Widgetbook for web
+      - name: Build Widgetbook
+        run: flutter build web --web-renderer html --release -t lib/widgetbook.dart
+
+      # Step 7: Upload to Widgetbook Cloud
+      - name: Upload to Widgetbook Cloud
+        env:
+          WIDGETBOOK_API_KEY: ${{ secrets.WIDGETBOOK_API_KEY }}
+        run: |
+          curl -X POST https://api.widgetbook.cloud/v1/uploads \
+          -H "Authorization: Bearer $WIDGETBOOK_API_KEY" \
+          -F "file=@build/web.zip" \
+          -F "project=your-project-id"
