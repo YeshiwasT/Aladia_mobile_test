@@ -44,7 +44,7 @@ jobs:
         run: flutter build web 
 
       - name: Install Widgetbook CLI
-        run: dart pub global activate --source path ../packages/widgetbook_cli
+        run: dart pub global activate widgetbook_cli
 
       - name: Push Build
         run: widgetbook cloud build push --api-key ${{ secrets.WIDGETBOOK_API_KEY }} 
