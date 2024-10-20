@@ -1,0 +1,57 @@
+name: Flutter CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop  # Adjust according to your branching strategy
+
+jobs:
+  flutter-ci:
+    runs-on: ubuntu-latest
+
+    env:
+      FLUTTER_VERSION: '3.24.3'  # Match this with your Flutter version
+
+    steps:
+      # Step 1: Checkout the code from the pull request
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Flutter SDK
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # Step 4: Navigate to the Widgetbook folder and run build_runner
+      - name: Run Build Runner
+        run: |
+          cd widgetbook    # Change this to the actual path
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          dart run build_runner build -d
+
+      # Step 5: Run unit tests
+
+      # Step 6: Build Widgetbook
+      - name: Build Widgetbook
+        run: |
+          cd widgetbook
+          flutter build web 
+
+      - name: Install Widgetbook CLI
+        run: |
+          cd widgetbook
+          dart pub global activate widgetbook_cli
+
+      - name: Push Build
+        env:
+          WIDGETBOOK_API_KEY: ${{ secrets.WIDGETBOOK_API_KEY }}
+        run: |
+          cd widgetbook
+          widgetbook cloud build push --api-key "$WIDGETBOOK_API_KEY"
