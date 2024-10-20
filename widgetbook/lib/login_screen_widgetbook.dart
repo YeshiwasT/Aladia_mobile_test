@@ -12,10 +12,30 @@ import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
 import 'package:http/http.dart' as http;
 
+// @widgetbook.UseCase(name: 'Login', type: LoginScreen)
+// Widget buildLoginUseCase(BuildContext context) {
+//   return LoginScreen();
+// }
+
 @widgetbook.UseCase(name: 'Login', type: LoginScreen)
 Widget buildLoginUseCase(BuildContext context) {
-  return LoginScreen();
+  final client = http.Client();
+  final authenticationRemoteDataSource =
+      AuthRemoteDatasourceImpl(client: client);
+
+  final authenticationRepository = Authrepositoryimpl(
+      authenticationRemoteDataSource: authenticationRemoteDataSource);
+  final loginUseCase =
+      LogInUseCase(authenticationRepository: authenticationRepository);
+
+  return BlocProvider(
+    create: (context) => LoginBloc(
+      logInUseCase: loginUseCase, // Pass the use case here
+    ),
+    child: const LoginScreen(),
+  );
 }
+
 // class LoginScreenWidgetbook {
 //   // Widgetbook category for Login Screen
 //   static WidgetbookCategory get category => WidgetbookCategory(
