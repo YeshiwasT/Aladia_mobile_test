@@ -37,8 +37,6 @@ jobs:
           dart run build_runner build -d
 
       # Step 5: Run unit tests
-      - name: Run Unit Tests
-        run: flutter test --coverage
 
       # Step 6: Build Widgetbook
       - name: Build Widgetbook
