@@ -18,12 +18,12 @@ ThemeData lightTheme = ThemeData(
 );
 
 ThemeData darkTheme = ThemeData(
-  brightness: Brightness.light,
+  brightness: Brightness.dark,
   splashColor: Colors.transparent,
   highlightColor: Colors.transparent,
   hoverColor: Colors.transparent,
   useMaterial3: true,
-  colorScheme: ColorScheme.light(
+  colorScheme: ColorScheme.dark(
     // seedColor: AppColor.primaryColor,
     primary: Colors.white,
     onPrimary: Colors.white,

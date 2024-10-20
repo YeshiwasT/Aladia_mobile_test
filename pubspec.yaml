@@ -72,6 +72,7 @@ flutter:
     - assets/apple-icon.png
     - assets/google-icon.png
     - assets/facebook-icon.png
+    - assets/app_icon.png
 
   #   - images/a_dot_ham.jpeg
 

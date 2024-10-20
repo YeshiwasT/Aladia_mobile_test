@@ -1,3 +1,4 @@
+import 'package:aladia_mobile/SplashScreen.dart';
 import 'package:aladia_mobile/core/app_themes/theme.dart';
 import 'package:aladia_mobile/injectionContainer.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +31,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // context.read<ThemeBloc>().add(InitializeThemeEvent());
-    // final state = context.watch<ThemeBloc>().state;
+    final state = context.watch<ThemeBloc>().state;
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Login Page',
         // You can use the library anywhere in the app even in theme
-        // themeMode: state.themeMode,
+        themeMode: state.themeMode,
         theme: lightTheme,
         darkTheme: darkTheme,
-        home: LoginScreen());
+        home: SplashScreen());
   }
 }
